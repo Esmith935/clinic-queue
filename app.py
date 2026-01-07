@@ -53,6 +53,27 @@ def index():
     
     return render_template('index.html')
 
+# -- Route: Staff Dashboard
+
+@app.route('/staff-dash')
+def staff_dash():
+
+    return render_template('staff-dash.html')
+
+# -- Route: Queue Dashboard
+
+@app.route('/queue-dash')
+def queue_dash():
+
+    return render_template('queue-dash.html')
+
+# -- Route: User Dashboard
+
+@app.route('/user-dash')
+def user_dash():
+
+    return render_template('user-dash.html')
+
 if (__name__) == '__main__':
     init_db()
     app.run(debug=True)
