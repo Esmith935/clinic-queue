@@ -55,13 +55,14 @@ def init_db():
 ## -------------------- ##
 
 # -- Route: Register (Staff)
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register_staff', methods=['GET', 'POST'])
 def register():
-    if 'username' in session:
+    if 'email' in session:
         return redirect(url_for('index'))
 
     if request.method == 'POST':
         email = request.form['email'].lower()
+        name = request.form['name']
         password = generate_password_hash(request.form['password'])
         staff_key_input = request.form['staff_key']
 
@@ -73,18 +74,18 @@ def register():
 
         try:
             with sqlite3.connect(DATABASE) as conn:
-                conn.execute('INSERT INTO staff (email, password) VALUES  (?, ?)', (email, password))
+                conn.execute('INSERT INTO staff (email, name, password) VALUES (?, ?, ?)', (email, name, password))
                 conn.commit()
             print("Registration successful")
             flash("Registration successful")
-            return redirect(url_for('staff-dash'))
+            return redirect(url_for('staff_dash'))
 
         except sqlite3.IntegrityError:
             print("Username already in use.")
             flash("Username already in use.")
-            return redirect(url_for('register'))
+            return redirect(url_for('register_staff'))
 
-    return render_template('register.html')
+    return render_template('register_staff.html')
 
 ## -------------------- ##
 

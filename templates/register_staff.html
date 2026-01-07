@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Sign Up</title>
+</head>
+<body>
+
+        <!-- navigation bar -->
+    <div class="topnav">
+        <span class="brand">Clinic Waiting</span>
+         <a href="{{ url_for('index') }}">Back to Home</a>
+        <div class="dropdown">
+            <button class="dropbtn">Settings</button>
+            <div class="dropdown-content">
+                <a href="#">Accessibility</a>
+                <a href="#" onclick="document.body.classList.add('dark-mode'); return false;">Dark Mode</a>
+                <a href="#" onclick="document.body.classList.remove('dark-mode'); return false;">Light Mode</a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="login-container">
+        <h2>Create Account</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert">{{ messages[0] }}</div>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('register') }}">
+            <label for="email">Email:</label>
+            <input type="email" name="email" required>
+
+            <label for="name">Full Name:</label>
+            <input type="text" name="name" required>
+
+            <label for="password">Password:</label>
+            <input type="password" name="password" required>
+
+            <label for="staff_key">Staff Key:</label>
+            <input type="password" name="staff_key" required>
+
+            <button type="submit" class="action-btn">Sign Up</button>
+        </form>
+    </div>
+
+</body>
+</html>
