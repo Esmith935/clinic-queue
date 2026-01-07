@@ -17,24 +17,32 @@ def init_db():
                 email TEXT NOT NULL UNIQUE,
                 password TEXT NOT NULL
             )
-                     
+        ''') # Tickets for queue
+
+
+        conn.execute('''
             CREATE TABLE IF NOT EXISTS staff (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 email TEXT NOT NULL UNIQUE,
                 password TEXT NOT NULL
             )
-                     
+        ''')
+
+        conn.execute('''
             CREATE TABLE IF NOT EXISTS tickets (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 customerid INTEGER NOT NULL UNIQUE
             )
-                     
-            CREATE TABLE IF NOT EXISTS bookings (
+        ''')
+
+        conn.execute('''
+                CREATE TABLE IF NOT EXISTS bookings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 customerid INTEGER NOT NULL UNIQUE,
                 date DATETIME NOT NULL
             )
-        ''') # Tickets for queue
+        ''')
+
 
         conn.commit()
 
