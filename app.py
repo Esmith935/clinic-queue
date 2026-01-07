@@ -5,6 +5,8 @@ import sqlite3
 app = Flask(__name__)
 app.secret_key = '6457fghd@@'
 
+staff_key = "Password1"
+
 DATABASE = 'database.db'
 
 # -- Initialise database
@@ -45,6 +47,44 @@ def init_db():
 
 
         conn.commit()
+
+## -------------------- ##
+# -- Auth routes -- #
+## -------------------- ##
+
+# -- Route: Register (Staff)
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if 'username' in session:
+        return redirect(url_for('index'))
+
+    if request.method == 'POST':
+        email = request.form['email'].lower()
+        password = generate_password_hash(request.form['password'])
+        staff_key_input = request.form['staff_key']
+
+        if staff_key_input != staff_key:
+            print('Invalid staff key!')
+            flash('Invalid staff key!')
+            return redirect(url_for('index'))
+            
+
+        try:
+            with sqlite3.connect(DATABASE) as conn:
+                conn.execute('INSERT INTO staff (email, password) VALUES  (?, ?)', (email, password))
+                conn.commit()
+            print("Registration successful")
+            flash("Registration successful")
+            return redirect(url_for('staff-dash'))
+
+        except sqlite3.IntegrityError:
+            print("Username already in use.")
+            flash("Username already in use.")
+            return redirect(url_for('register'))
+
+    return render_template('register.html')
+
+## -------------------- ##
 
 # -- Route: Index
 
