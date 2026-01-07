@@ -17,6 +17,7 @@ def init_db():
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 email TEXT NOT NULL UNIQUE,
+                name TEXT NOT NULL,
                 password TEXT NOT NULL
             )
         ''') # Tickets for queue
@@ -26,6 +27,7 @@ def init_db():
             CREATE TABLE IF NOT EXISTS staff (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 email TEXT NOT NULL UNIQUE,
+                name TEXT NOT NULL,
                 password TEXT NOT NULL
             )
         ''')
