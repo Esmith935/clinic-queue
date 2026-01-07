@@ -9,3 +9,34 @@
 <body>  
     <h1>Welcome to the clinic Waiting page </h1>
     
+    <!-- navigation bar -->
+    <div class="topnav">
+        <span class="brand">Clinic Waiting</span>
+        <div class="dropdown">
+            <button class="dropbtn">Settings</button>
+            <div class="dropdown-content">
+                <a href="#">Accessibility</a>
+                <a href="#" onclick="document.body.classList.add('dark-mode'); return false;">Dark Mode</a>
+                <a href="#" onclick="document.body.classList.remove('dark-mode'); return false;">Light Mode</a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+      <!-- dashboard for the challenges -->
+     <div class="dashboard-grid">
+
+        <div class="card">
+            <h3>User dashboard</h3>
+            <p>View your user information</p>
+            <a href="/agechecker" class="action-btn">Open User dashboard</a>
+        </div>
+
+        <div class="card">
+            <h3>Staff dashboard</h3>
+            <p>View staff information</p>
+            <a href="/gift_list" class="action-btn">Open Staff dashboard</a>
+        </div>
+    </div>
+</body>
+</html>
