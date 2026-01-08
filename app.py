@@ -145,6 +145,27 @@ def user_dash():
 
     return render_template('user-dash.html')
 
+## -------------------- ##
+# -- Login routes -- #
+@app.route('/login-staff', methods=['GET', 'POST'])
+def login_staff():
+    return render_template('login-staff.html')
+
+@app.route('/login-user', methods=['GET', 'POST'])
+def login_user():
+    return render_template('login-user.html')
+
+## -------------------- ##
+#-- Register routes -- #
+
+@app.route('/staff-register', methods=['GET', 'POST'])
+def staff_register():
+    return render_template('register_staff.html')
+
+@app.route('/user-register', methods=['GET', 'POST'])
+def user_register():
+    return render_template('register_user.html')
+
 if (__name__) == '__main__':
     init_db()
     app.run(debug=True)
