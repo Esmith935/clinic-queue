@@ -215,7 +215,7 @@ def queue_dash():
                 if tickets[i][1] == email:
                     queue_number = n
         else:
-            conn.execute('INSERT INTO tickets (customeremail) VALUES (?)', (email))
+            conn.execute('INSERT INTO tickets (customeremail) VALUES (?)', (email,))
 
             return redirect(url_for('wait_dash'))
 
