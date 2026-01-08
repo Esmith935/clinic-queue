@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0    ">
+    <title>Staff Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>  
+    <h1>Welcome to the clinic Waiting page </h1>
+    
+    <!-- navigation bar -->
+    <div class="topnav">
+        <span class="brand">Staff Dashboard</span>
+        <a href="{{ url_for('index') }}">Back to Home</a>
+        <a href="{{url_for('logout')}}">Logout</a>
+        <div class="dropdown">
+            <button class="dropbtn">Settings</button>
+            <div class="dropdown-content">
+                <a href="#">Accessibility</a>
+                <a href="#" onclick="document.body.classList.add('dark-mode'); return false;">Dark Mode</a>
+                <a href="#" onclick="document.body.classList.remove('dark-mode'); return false;">Light Mode</a>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <table>
+        <thead>
+            <th onclick="sortTable(2)">Queue Number</th>
+            <th onclick="sortTable(1)">Name</th>
+            <th>Accept</th>
+            <th>Decline</th>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+                <tr>
+                    <td>{{ticket[2]}}</td>
+                    <td>{{ticket[1]}}</td>
+                    <td><a href="">Accept</a></td>
+                    <td><a href="">Decline</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>

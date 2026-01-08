@@ -235,14 +235,45 @@ def user_dash():
 
     return render_template('user-dash.html')
 
-
 # -- Route: Book Appointment
+
 @app.route('/book')
 def book_appointment():
     if 'email' not in session:
         return redirect(url_for('login_user'))
 
     return render_template('book.html')
+
+# -- Route: Manage Bookings
+
+@app.route('/manage-bookings')
+def manage_bookings():
+    if 'email' not in session:
+        return redirect(url_for('login_staff'))
+    
+    return render_template('manage_bookings.html')
+
+# -- Route: Manage Queue
+
+@app.route('/manage-queue')
+def manage_queue():
+    if 'email' not in session:
+        return redirect(url_for('login_staff'))
+    
+    with sqlite3.connect(DATABASE) as conn:
+        tickets = conn.execute(
+            'SELECT * FROM tickets').fetchall()
+        n = 0
+        ticketsList = []
+
+        for i in tickets:
+
+            tickets.append(i + 1)
+
+            n += 1
+
+    print(tickets)
+    return render_template('manage-queue.html', tickets = tickets)
 
 if (__name__) == '__main__':
     init_db()
