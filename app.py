@@ -232,6 +232,15 @@ def user_dash():
 
     return render_template('user-dash.html')
 
+
+# -- Route: Book Appointment
+@app.route('/book')
+def book_appointment():
+    if 'email' not in session:
+        return redirect(url_for('login_user'))
+
+    return render_template('book.html')
+
 if (__name__) == '__main__':
     init_db()
     app.run(debug=True)
