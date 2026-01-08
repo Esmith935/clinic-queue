@@ -261,19 +261,28 @@ def manage_queue():
         return redirect(url_for('login_staff'))
     
     with sqlite3.connect(DATABASE) as conn:
-        tickets = conn.execute(
-            'SELECT * FROM tickets').fetchall()
-        n = 0
-        ticketsList = []
+        # Join with users table to get the names of people in the queue
+        #tickets = conn.execute('''
+        #    SELECT tickets.id, users.name, tickets.customeremail 
+        #    FROM tickets 
+        #    JOIN users ON tickets.customeremail = users.email
+        #    ORDER BY tickets.id ASC
+        #''').fetchall()
 
-        for i in tickets:
-
-            tickets.append(i + 1)
-
-            n += 1
+        tickets = conn.execute('''
+            SELECT * FROM tickets
+        ''').fetchall()
 
     print(tickets)
     return render_template('manage-queue.html', tickets = tickets)
+
+# -- Route: Delete ticket
+@app.route('/delete_ticket/<int:ticket_id>', methods=['GET', 'POST'])
+def delete_ticket(ticket_id):
+    with sqlite3.connect(DATABASE) as conn:
+        conn.execute('DELETE FROM tickets WHERE id = ?', (ticket_id,))
+        conn.commit()
+    return redirect(url_for('manage_queue'))
 
 if (__name__) == '__main__':
     init_db()
