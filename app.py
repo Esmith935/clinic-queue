@@ -160,11 +160,11 @@ def login_user():
 
 @app.route('/staff-register', methods=['GET', 'POST'])
 def staff_register():
-    return render_template('register_staff.html')
+    return render_template('register-staff.html')
 
 @app.route('/user-register', methods=['GET', 'POST'])
 def user_register():
-    return render_template('register_user.html')
+    return render_template('register-user.html')
 
 if (__name__) == '__main__':
     init_db()
