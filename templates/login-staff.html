@@ -23,3 +23,21 @@
         </div>
     </div>
     </div>
+
+    <div class="login-form">
+        <h2>Staff Login</h2>
+        <form method="POST" action="{{ url_for('login_staff') }}">
+            <label for="staff_id">Staff ID:</label>
+            <input type="text" id="staff_id" name="staff_id" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for ="staff-key">Staff Key:</label>
+            <input type="password" id="staff-key" name="staff-key" required>
+            
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>
