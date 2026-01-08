@@ -35,7 +35,7 @@ def init_db():
         conn.execute('''
             CREATE TABLE IF NOT EXISTS tickets (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                customerid INTEGER NOT NULL UNIQUE
+                customeremail TEXT NOT NULL UNIQUE
             )
         ''')
 
@@ -195,13 +195,32 @@ def staff_dash():
 
 # -- Route: Queue Dashboard
 
-@app.route('/queue-dash')
+@app.route('/wait-dash')
 def queue_dash():
     if 'email' not in session:
 
         return redirect(url_for('login_user'))
+    
+    email = session['email']
+    
+    with sqlite3.connect(DATABASE) as conn:
+        ticketExists = conn.execute('SELECT * FROM tickets WHERE customeremail = ?', (email,)).fetchone()
+        if ticketExists:
+            tickets = conn.execute('SELECT * FROM tickets').fetchall()
+            n = 0
 
-    return render_template('queue-dash.html')
+            for i in tickets:
+                n += 1
+
+                if tickets[i][1] == email:
+                    queue_number = n
+        else:
+            conn.execute('INSERT INTO tickets (customeremail) VALUES (?)', (email))
+
+            return redirect(url_for('wait_dash'))
+
+
+    return render_template('wait-dash.html', queue_number = queue_number)
 
 # -- Route: User Dashboard
 
