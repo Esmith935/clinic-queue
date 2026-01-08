@@ -42,8 +42,8 @@ def init_db():
         conn.execute('''
                 CREATE TABLE IF NOT EXISTS bookings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                customerid INTEGER NOT NULL UNIQUE,
-                date DATETIME NOT NULL
+                customeremail TEXT NOT NULL,
+                date TEXT NOT NULL
             )
         ''')
 
@@ -237,27 +237,28 @@ def user_dash():
 
 # -- Route: Book Appointment
 
-@app.route('/book', methods=['POST'])
+@app.route('/book', methods=['GET', 'POST'])
 def book_appointment():
     if 'email' not in session:
         return redirect(url_for('login_user'))
     
-    date = request.form.get('date')
-    time = request.form.get('time')
-    customeremail = session['email']
+    if request.method == 'POST':
+        date = request.form.get('date')
+        time = request.form.get('time')
+        customeremail = session['email']
 
-    #combine date and time into a single datetime string
-    appointemt_datetime = f"{date} {time}"
+        #combine date and time into a single datetime string
+        appointemt_datetime = f"{date} {time}"
 
-    with sqlite3.connect(DATABASE) as conn:
-        user= conn.execute('SELECT id FROM users WHERE email = ?', (customeremail,)).fetchone()
-        if user:
-            conn.execute('INSERT INTO bookings (id, date) VALUES (?, ?)', 
-                         (user[0], appointemt_datetime))
-            conn.commit()
-            flash('Appointment booked successfully.')
+        with sqlite3.connect(DATABASE) as conn:
+            user = conn.execute('SELECT id FROM users WHERE email = ?', (customeremail,)).fetchone()
+            if user:
+                conn.execute('INSERT INTO bookings (customeremail, date) VALUES (?, ?)', 
+                            (customeremail, appointemt_datetime))
+                conn.commit()
+                flash('Appointment booked successfully.')
 
-        return redirect(url_for('user_dash'))
+            return redirect(url_for('user_dash'))
 
     return render_template('book.html')
 
@@ -268,7 +269,10 @@ def manage_bookings():
     if 'email' not in session:
         return redirect(url_for('login_staff'))
     
-    return render_template('manage_bookings.html')
+    with sqlite3.connect(DATABASE) as conn:
+        bookings = conn.execute('SELECT * FROM bookings').fetchall()
+    
+    return render_template('manage-bookings.html', bookings = bookings)
 
 # -- Route: Manage Queue
 
@@ -293,13 +297,21 @@ def manage_queue():
     print(tickets)
     return render_template('manage-queue.html', tickets = tickets)
 
-# -- Route: Delete ticket
+# -- Route: Delete Ticket
 @app.route('/delete_ticket/<int:ticket_id>', methods=['GET', 'POST'])
 def delete_ticket(ticket_id):
     with sqlite3.connect(DATABASE) as conn:
         conn.execute('DELETE FROM tickets WHERE id = ?', (ticket_id,))
         conn.commit()
     return redirect(url_for('manage_queue'))
+
+# -- Route: Delete Bookings
+@app.route('/delete_booking/<int:booking_id>', methods=['GET', 'POST'])
+def delete_booking(booking_id):
+    with sqlite3.connect(DATABASE) as conn:
+        conn.execute('DELETE FROM bookings WHERE id = ?', (booking_id,))
+        conn.commit()
+    return redirect(url_for('manage_bookings'))
 
 if (__name__) == '__main__':
     init_db()
