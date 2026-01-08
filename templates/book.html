@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0    ">
-    <title>User Dashboard</title>
+    <title>Book Appointment</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>  
     <h1>Welcome to the clinic Waiting page </h1>
-    
-    <!-- navigation bar -->
+
+        <!-- navigation bar -->
     <div class="topnav">
         <span class="brand">User Dashboard</span>
         <a href="{{ url_for('index') }}">Back to Home</a>
@@ -25,17 +25,11 @@
     </div>
     </div>
 
-    <!-- User Information Section -->
-
-        <div class="card">
-            <h3>Book an Appointment</h3>
-            <p>schedule an Appointment at a select time and date</p>
-            <a href="/book" class="action-btn">book an appoitment</a>
-        </div>
-
-        <div class="card">
-            <h3>See a doctor now</h3>
-            <p>View your current waiting status</p>
-            <a href="/wait-dash" class="action-btn">Join queue</a>
-        </div>
-    </div>
+    <!-- Book Appointment Form -->
+    <form action="/book-appointment" method="post">
+        <label for="date">Select Date:</label>
+        <input type="date" id="date" name="date" required>
+        <button type="submit">Book Appointment</button>
+    </form>
+</body>
+</html>
