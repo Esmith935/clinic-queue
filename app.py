@@ -104,8 +104,8 @@ def login_staff():
             return redirect(url_for('index'))
         
         with sqlite3.connect(DATABASE) as conn:
-            user = conn.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
-        if user and check_password_hash(user[2], password_input):
+            user = conn.execute('SELECT * FROM staff WHERE email = ?', (email,)).fetchone()
+        if user and check_password_hash(user[3], password_input):
             session['email'] = email
             flash('Login successful.')
             return redirect(url_for('staff_dash'))
@@ -143,6 +143,36 @@ def register_user():
     return render_template('register_user.html')
 
 
+# -- Route: Login (User)
+
+@app.route('/login-user', methods=['GET', 'POST'])
+def login_user():
+    if 'email' in session:
+        return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        email = (request.form['email']).lower()
+        password_input = request.form['password']
+
+        with sqlite3.connect(DATABASE) as conn:
+            user = conn.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
+        if user and check_password_hash(user[3], password_input):
+            session['email'] = email
+            flash('Login successful.')
+            return redirect(url_for('user_dash'))
+        else:
+            flash('Invalid email or password.')
+            return redirect(url_for('login_user'))
+
+    return render_template('login-user.html')
+
+# -- Route: Logout
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('Logged out successfully.')
+    return redirect(url_for('index'))
 
 ## -------------------- ##
 
@@ -157,6 +187,9 @@ def index():
 
 @app.route('/staff-dash')
 def staff_dash():
+    if 'email' not in session:
+
+        return redirect(url_for('login_staff'))
 
     return render_template('staff-dash.html')
 
@@ -164,6 +197,9 @@ def staff_dash():
 
 @app.route('/queue-dash')
 def queue_dash():
+    if 'email' not in session:
+
+        return redirect(url_for('login_user'))
 
     return render_template('queue-dash.html')
 
@@ -171,29 +207,11 @@ def queue_dash():
 
 @app.route('/user-dash')
 def user_dash():
+    if 'email' not in session:
+
+        return redirect(url_for('login_user'))
 
     return render_template('user-dash.html')
-
-## -------------------- ##
-# -- Login routes -- #
-@app.route('/login-staff', methods=['GET', 'POST'])
-def login_staff():
-    return render_template('login-staff.html')
-
-@app.route('/login-user', methods=['GET', 'POST'])
-def login_user():
-    return render_template('login-user.html')
-
-## -------------------- ##
-#-- Register routes -- #
-
-@app.route('/staff-register', methods=['GET', 'POST'])
-def staff_register():
-    return render_template('register-staff.html')
-
-@app.route('/user-register', methods=['GET', 'POST'])
-def user_register():
-    return render_template('register-user.html')
 
 if (__name__) == '__main__':
     init_db()
