@@ -237,10 +237,27 @@ def user_dash():
 
 # -- Route: Book Appointment
 
-@app.route('/book')
+@app.route('/book', methods=['POST'])
 def book_appointment():
     if 'email' not in session:
         return redirect(url_for('login_user'))
+    
+    date = request.form.get('date')
+    time = request.form.get('time')
+    customeremail = session['email']
+
+    #combine date and time into a single datetime string
+    appointemt_datetime = f"{date} {time}"
+
+    with sqlite3.connect(DATABASE) as conn:
+        user= conn.execute('SELECT id FROM users WHERE email = ?', (customeremail,)).fetchone()
+        if user:
+            conn.execute('INSERT INTO bookings (id, date) VALUES (?, ?)', 
+                         (user[0], appointemt_datetime))
+            conn.commit()
+            flash('Appointment booked successfully.')
+
+        return redirect(url_for('user_dash'))
 
     return render_template('book.html')
 
