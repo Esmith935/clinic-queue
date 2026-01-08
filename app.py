@@ -86,6 +86,35 @@ def register_staff():
 
     return render_template('register_staff.html')
 
+# -- Route: Login (Staff)
+
+@app.route('/login-staff', methods=['GET', 'POST'])
+def login_staff():
+    if 'email' in session:
+        return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        email = (request.form['email']).lower()
+        password_input = request.form['password']
+        staff_key_input = request.form['staff_key']
+
+        if staff_key_input != staff_key:
+            print('Invalid staff key!')
+            flash('Invalid staff key!')
+            return redirect(url_for('index'))
+        
+        with sqlite3.connect(DATABASE) as conn:
+            user = conn.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
+        if user and check_password_hash(user[2], password_input):
+            session['email'] = email
+            flash('Login successful.')
+            return redirect(url_for('staff_dash'))
+        else:
+            flash('Invalid email or password.')
+            return redirect(url_for('login_staff'))
+
+    return render_template('login-staff.html')
+
 # -- Route: Register (User)
 
 @app.route('/register_user', methods=['GET', 'POST'])

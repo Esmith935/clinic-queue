@@ -28,14 +28,14 @@
     <div class="login-form">
         <h2>Staff Login</h2>
         <form method="POST" action="{{ url_for('login_staff') }}">
-            <label for="staff_id">Staff ID:</label>
-            <input type="text" id="staff_id" name="staff_id" required>
+            <label for="email">Staff Email:</label>
+            <input type="email" id="email" name="email" required>
             
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
 
-            <label for ="staff-key">Staff Key:</label>
-            <input type="password" id="staff-key" name="staff-key" required>
+            <label for ="staff_key">Staff Key:</label>
+            <input type="password" id="staff_key" name="staff_key" required>
             
             <button type="submit">Login</button>
         </form>
