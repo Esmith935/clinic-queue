@@ -212,12 +212,15 @@ def queue_dash():
             for i in tickets:
                 n += 1
 
-                if tickets[i][1] == email:
+                if i[1] == email:
                     queue_number = n
+
+                    break
+            
         else:
             conn.execute('INSERT INTO tickets (customeremail) VALUES (?)', (email,))
 
-            return redirect(url_for('wait_dash'))
+            return redirect(url_for('queue_dash'))
 
 
     return render_template('wait-dash.html', queue_number = queue_number)
