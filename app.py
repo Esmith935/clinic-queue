@@ -180,26 +180,34 @@ def logout():
 
 @app.route('/')
 def index():
+    registered = False
+    if 'email' in session:
+
+        registered = True
     
-    return render_template('index.html')
+    return render_template('index.html', registered = registered)
 
 # -- Route: Staff Dashboard
 
 @app.route('/staff-dash')
 def staff_dash():
+    registered = False
     if 'email' not in session:
 
         return redirect(url_for('login_staff'))
+    else: registered = True
 
-    return render_template('staff-dash.html')
+    return render_template('staff-dash.html', registered = registered)
 
 # -- Route: Queue Dashboard
 
 @app.route('/wait-dash')
 def queue_dash():
+    registered = False
     if 'email' not in session:
 
         return redirect(url_for('login_user'))
+    else: registered = True
     
     email = session['email']
     
@@ -223,24 +231,29 @@ def queue_dash():
             return redirect(url_for('queue_dash'))
 
 
-    return render_template('wait-dash.html', queue_number = queue_number)
+    return render_template('wait-dash.html', queue_number = queue_number, registered = registered)
 
 # -- Route: User Dashboard
 
 @app.route('/user-dash')
 def user_dash():
+    registered = False
     if 'email' not in session:
 
         return redirect(url_for('login_user'))
+    else: registered = True
 
-    return render_template('user-dash.html')
+    return render_template('user-dash.html', registered = registered)
 
 # -- Route: Book Appointment
 
 @app.route('/book', methods=['GET', 'POST'])
 def book_appointment():
+    registered = False
     if 'email' not in session:
+
         return redirect(url_for('login_user'))
+    else: registered = True
     
     if request.method == 'POST':
         date = request.form.get('date')
@@ -260,26 +273,32 @@ def book_appointment():
 
             return redirect(url_for('user_dash'))
 
-    return render_template('book.html')
+    return render_template('book.html', registered = registered)
 
 # -- Route: Manage Bookings
 
 @app.route('/manage-bookings')
 def manage_bookings():
+    registered = False
     if 'email' not in session:
+
         return redirect(url_for('login_staff'))
+    else: registered = True
     
     with sqlite3.connect(DATABASE) as conn:
         bookings = conn.execute('SELECT * FROM bookings').fetchall()
     
-    return render_template('manage-bookings.html', bookings = bookings)
+    return render_template('manage-bookings.html', bookings = bookings, registered = registered)
 
 # -- Route: Manage Queue
 
 @app.route('/manage-queue')
 def manage_queue():
+    registered = False
     if 'email' not in session:
+
         return redirect(url_for('login_staff'))
+    else: registered = True
     
     with sqlite3.connect(DATABASE) as conn:
         # Join with users table to get the names of people in the queue
@@ -295,7 +314,7 @@ def manage_queue():
         ''').fetchall()
 
     print(tickets)
-    return render_template('manage-queue.html', tickets = tickets)
+    return render_template('manage-queue.html', tickets = tickets, registered = registered)
 
 # -- Route: Delete Ticket
 @app.route('/delete_ticket/<int:ticket_id>', methods=['GET', 'POST'])

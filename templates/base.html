@@ -13,7 +13,7 @@
         <div class="topnav">
             <span class="brand">User Dashboard</span>
             <a href="{{ url_for('index') }}">Back to Home</a>
-            <a href="{{url_for('logout')}}">Logout</a>
+            {% if registered%}<a href="{{url_for('logout')}}">Logout</a>{% endif %}
             <div class="dropdown">
                 <button class="dropbtn">Settings</button>
                 <div class="dropdown-content">
@@ -22,7 +22,6 @@
                     <a href="#" onclick="document.body.classList.remove('dark-mode'); return false;">Light Mode</a>
                 </div>
             </div>
-        </div>
         </div>
 
         <main>
