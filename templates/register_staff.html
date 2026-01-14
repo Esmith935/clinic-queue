@@ -1,27 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <title>Sign Up</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-        <!-- navigation bar -->
-    <div class="topnav">
-        <span class="brand">Clinic Waiting</span>
-         <a href="{{ url_for('index') }}">Back to Home</a>
-        <div class="dropdown">
-            <button class="dropbtn">Settings</button>
-            <div class="dropdown-content">
-                <a href="#">Accessibility</a>
-                <a href="#" onclick="document.body.classList.add('dark-mode'); return false;">Dark Mode</a>
-                <a href="#" onclick="document.body.classList.remove('dark-mode'); return false;">Light Mode</a>
-            </div>
-        </div>
-    </div>
-    </div>
+{% block title %}Home{% endblock %}
 
+{% block content %}
     <div class="login-container">
         <h2>Create Account</h2>
 
@@ -47,6 +28,4 @@
             <button type="submit" class="action-btn">Sign Up</button>
         </form>
     </div>
-
-</body>
-</html>
+{% endblock %}
