@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+      <!-- Customise website appearance -->
+      <form method="POST">
+            <label for="title">Note Title:</label>
+            <input type="text" id="displayname" name="displayname" placeholder="{{displayname}}" required><br>
+            <input type="submit" value="Post">
+      </form>
+{% endblock %}

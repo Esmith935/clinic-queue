@@ -9,7 +9,13 @@ staff_key = "Password1"
 
 DATABASE = 'database.db'
 
-# -- Initialise database
+# -- Get Website Display Name
+
+def get_displayname():
+    displayname = open("clinic-queue/displayname.txt", "r").read()
+    return displayname
+
+# -- Initialise Database
 
 def init_db():
     with sqlite3.connect(DATABASE) as conn:
@@ -56,6 +62,7 @@ def init_db():
 # -- Route: Register (Staff)
 @app.route('/register_staff', methods=['GET', 'POST'])
 def register_staff():
+    registered = False
     if 'email' in session:
         return redirect(url_for('index'))
 
@@ -84,12 +91,13 @@ def register_staff():
             flash("Username already in use.")
             return redirect(url_for('register_staff'))
 
-    return render_template('register_staff.html')
+    return render_template('register_staff.html', registered = registered, displayname = get_displayname)
 
 # -- Route: Login (Staff)
 
 @app.route('/login-staff', methods=['GET', 'POST'])
 def login_staff():
+    registered = False
     if 'email' in session:
         return redirect(url_for('index'))
     
@@ -113,12 +121,13 @@ def login_staff():
             flash('Invalid email or password.')
             return redirect(url_for('login_staff'))
 
-    return render_template('login-staff.html')
+    return render_template('login-staff.html', registered = registered, displayname = get_displayname)
 
 # -- Route: Register (User)
 
 @app.route('/register_user', methods=['GET', 'POST'])
 def register_user():
+    registered = False
     if 'email' in session:
         return redirect(url_for('index'))
 
@@ -140,13 +149,14 @@ def register_user():
             flash("Username already in use.")
             return redirect(url_for('register_user'))
 
-    return render_template('register_user.html')
+    return render_template('register_user.html', registered = registered, displayname = get_displayname)
 
 
 # -- Route: Login (User)
 
 @app.route('/login-user', methods=['GET', 'POST'])
 def login_user():
+    registered = False
     if 'email' in session:
         return redirect(url_for('index'))
     
@@ -164,7 +174,7 @@ def login_user():
             flash('Invalid email or password.')
             return redirect(url_for('login_user'))
 
-    return render_template('login-user.html')
+    return render_template('login-user.html', registered = registered, displayname = get_displayname)
 
 # -- Route: Logout
 
@@ -174,6 +184,8 @@ def logout():
     flash('Logged out successfully.')
     return redirect(url_for('index'))
 
+## -------------------- ##
+## -------------------- ##
 ## -------------------- ##
 
 # -- Route: Index
@@ -185,7 +197,7 @@ def index():
 
         registered = True
     
-    return render_template('index.html', registered = registered)
+    return render_template('index.html', registered = registered, displayname = get_displayname())
 
 # -- Route: Staff Dashboard
 
@@ -197,7 +209,7 @@ def staff_dash():
         return redirect(url_for('login_staff'))
     else: registered = True
 
-    return render_template('staff-dash.html', registered = registered)
+    return render_template('staff-dash.html', registered = registered, displayname = get_displayname)
 
 # -- Route: Queue Dashboard
 
@@ -231,7 +243,7 @@ def queue_dash():
             return redirect(url_for('queue_dash'))
 
 
-    return render_template('wait-dash.html', queue_number = queue_number, registered = registered)
+    return render_template('wait-dash.html', queue_number = queue_number, registered = registered, displayname = get_displayname)
 
 # -- Route: User Dashboard
 
@@ -243,7 +255,7 @@ def user_dash():
         return redirect(url_for('login_user'))
     else: registered = True
 
-    return render_template('user-dash.html', registered = registered)
+    return render_template('user-dash.html', registered = registered, displayname = get_displayname)
 
 # -- Route: Book Appointment
 
@@ -273,7 +285,7 @@ def book_appointment():
 
             return redirect(url_for('user_dash'))
 
-    return render_template('book.html', registered = registered)
+    return render_template('book.html', registered = registered, displayname = get_displayname)
 
 # -- Route: Manage Bookings
 
@@ -288,7 +300,7 @@ def manage_bookings():
     with sqlite3.connect(DATABASE) as conn:
         bookings = conn.execute('SELECT * FROM bookings').fetchall()
     
-    return render_template('manage-bookings.html', bookings = bookings, registered = registered)
+    return render_template('manage-bookings.html', bookings = bookings, registered = registered, displayname = get_displayname)
 
 # -- Route: Manage Queue
 
@@ -313,8 +325,27 @@ def manage_queue():
             SELECT * FROM tickets
         ''').fetchall()
 
-    print(tickets)
-    return render_template('manage-queue.html', tickets = tickets, registered = registered)
+    #print(tickets)
+    return render_template('manage-queue.html', tickets = tickets, registered = registered, displayname = get_displayname)
+
+# -- Route: Customise Website Aesthetic
+@app.route('/customise', methods=['GET', 'POST'])
+def customise():
+    registered = False
+    if 'email' not in session:
+        return redirect(url_for('login_staff'))
+    
+    if request.method == 'POST':
+        displayname = request.form['displayname']
+
+        with open("clinic-queue/displayname.txt", "w") as f:
+            f.write(displayname)
+
+        flash("Rewrite successful")
+        return(redirect(url_for('staff_dash')))
+
+
+    return render_template('customise.html', registered = registered, displayname = get_displayname)
 
 # -- Route: Delete Ticket
 @app.route('/delete_ticket/<int:ticket_id>', methods=['GET', 'POST'])
