@@ -1,4 +1,4 @@
-# import chatbot
+# chatbot imports
 from google import genai 
 # other imports
 from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify
