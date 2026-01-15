@@ -9,7 +9,7 @@ staff_key = "Password1"
 
 DATABASE = 'database.db'
 
-# -- Get Website Display Name
+# -- Get Website Display Name :
 
 def get_displayname():
     displayname = open("clinic-queue/displayname.txt", "r").read()
