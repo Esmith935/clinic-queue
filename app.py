@@ -1,12 +1,18 @@
-# impor chatbot
-import google.generativeai as genai 
-#other imports
-from flask import Flask, render_template, redirect, url_for, request, flash, session,jsonify
+# import chatbot
+from google import genai 
+# other imports
+from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 
 app = Flask(__name__)
 app.secret_key = '6457fghd@@'
+
+#-- google gen AI config --
+client = genai.Client(api_key='AIzaSyBDDsqJRL_tQn_0Zp-Dqu_drkP9gcAjaFg')
+MODEL_ID="gemini-1.5-flash"
+
+
 
 staff_key = "Password1"
 
@@ -365,6 +371,32 @@ def delete_booking(booking_id):
         conn.execute('DELETE FROM bookings WHERE id = ?', (booking_id,))
         conn.commit()
     return redirect(url_for('manage_bookings'))
+
+
+
+
+# chatbot route
+@app.route('/chatbot', methods=['POST'])   
+def chatbot():
+    if 'email' not in session:
+        return jsonify({'error': 'Unauthorized'}), 401
+
+    user_message = request.json.get('message', '')
+    displayname = get_displayname()
+
+    #context for Ai assistant
+    context = f"You are {displayname}, a helpful assistant for a clinic queue management system"
+
+    response = client.models.generate_content(
+        model=MODEL_ID,
+        contents=f"{context}\n\nUser Question: {user_message}",
+    )
+    reply = response.text
+    except Exception as e:
+        print(f"AI Error: {e}")
+        reply = "Sorry, I'm having trouble processing your request right now."
+    return jsonify({'reply': reply})
+
 
 if (__name__) == '__main__':
     init_db()
