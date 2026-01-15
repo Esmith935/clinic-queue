@@ -387,14 +387,16 @@ def chatbot():
     #context for Ai assistant
     context = f"You are {displayname}, a helpful assistant for a clinic queue management system"
 
-    response = client.models.generate_content(
-        model=MODEL_ID,
-        contents=f"{context}\n\nUser Question: {user_message}",
-    )
-    reply = response.text
+    try: 
+        response = client.models.generate_content(
+            model=MODEL_ID,
+            contents=f"{context}\n\nUser Question: {user_message}",
+        )
+        reply = response.text
     except Exception as e:
         print(f"AI Error: {e}")
         reply = "Sorry, I'm having trouble processing your request right now."
+    
     return jsonify({'reply': reply})
 
 
