@@ -1,15 +1,21 @@
 # chatbot imports
+import os
 from google import genai 
+from dotnev import load_dotenv
 # other imports
 from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 
+#loads environment variables from a .env file
+load_dotenv()
+
+
 app = Flask(__name__)
 app.secret_key = '6457fghd@@'
 
 #-- google gen AI config --
-client = genai.Client(api_key='AIzaSyCqOBNP8WFT6PnKJztBT8ICNPj-FDDo4NQ')
+client = genai.Client(api_key=os.getenv('AIzaSyCutvPxNe_CtRk0IrDRUVY7Q10lbpkp0Jc'))
 MODEL_ID="gemini-3-flash-preview"
 
 
