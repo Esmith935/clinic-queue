@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 # other imports
 from flask import Flask, render_template, redirect, url_for, request, flash, session, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 import sqlite3
 
 #loads environment variables from a .env file
@@ -13,6 +14,11 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = '6457fghd@@'
+
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 #-- google gen AI config --
 client = genai.Client(api_key=os.getenv('GOOGLE_API_KEY'))
@@ -23,6 +29,12 @@ MODEL_ID="gemini-3-flash-preview"
 staff_key = "Password1"
 
 DATABASE = 'database.db'
+
+# -- Validate file extensions / Allowed extensions seen in ALLOWED_EXTENSIONS
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # -- Get Website Display Name :
 
@@ -352,9 +364,16 @@ def customise():
     
     if request.method == 'POST':
         displayname = request.form['displayname']
+        background = request.files.get('background')
+        background_filename = None
 
-        with open("clinic-queue/displayname.txt", "w") as f:
+        with open("displayname.txt", "w") as f:
             f.write(displayname)
+        
+        if background and allowed_file(background.filename):
+            filename = secure_filename(background.filename)
+            background.save(os.path.join(UPLOAD_FOLDER, filename))
+
 
         flash("Rewrite successful")
         return(redirect(url_for('staff_dash')))

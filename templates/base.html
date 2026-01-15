@@ -5,6 +5,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0    ">
         <title>{% block title %}Clinic{% endblock %}</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <style>
+            body {
+                /* Background Image */
+                background-image: url("{{ url_for('static', filename='uploads/background.jpg') }}");
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+                
+            }
+        </style>
     </head>
     <body>
         <h1>{{displayname}}</h1>
