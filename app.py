@@ -9,8 +9,8 @@ app = Flask(__name__)
 app.secret_key = '6457fghd@@'
 
 #-- google gen AI config --
-client = genai.Client(api_key='AIzaSyBDDsqJRL_tQn_0Zp-Dqu_drkP9gcAjaFg')
-MODEL_ID="3-pro-image-preview"
+client = genai.Client(api_key='AIzaSyCqOBNP8WFT6PnKJztBT8ICNPj-FDDo4NQ')
+MODEL_ID="gemini-3-flash-preview"
 
 
 
