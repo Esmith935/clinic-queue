@@ -91,7 +91,7 @@ def register_staff():
             flash("Username already in use.")
             return redirect(url_for('register_staff'))
 
-    return render_template('register_staff.html', registered = registered, displayname = get_displayname)
+    return render_template('register_staff.html', registered = registered, displayname = get_displayname())
 
 # -- Route: Login (Staff)
 
@@ -121,7 +121,7 @@ def login_staff():
             flash('Invalid email or password.')
             return redirect(url_for('login_staff'))
 
-    return render_template('login-staff.html', registered = registered, displayname = get_displayname)
+    return render_template('login-staff.html', registered = registered, displayname = get_displayname())
 
 # -- Route: Register (User)
 
@@ -149,7 +149,7 @@ def register_user():
             flash("Username already in use.")
             return redirect(url_for('register_user'))
 
-    return render_template('register_user.html', registered = registered, displayname = get_displayname)
+    return render_template('register_user.html', registered = registered, displayname = get_displayname())
 
 
 # -- Route: Login (User)
@@ -174,7 +174,7 @@ def login_user():
             flash('Invalid email or password.')
             return redirect(url_for('login_user'))
 
-    return render_template('login-user.html', registered = registered, displayname = get_displayname)
+    return render_template('login-user.html', registered = registered, displayname = get_displayname())
 
 # -- Route: Logout
 
@@ -209,7 +209,7 @@ def staff_dash():
         return redirect(url_for('login_staff'))
     else: registered = True
 
-    return render_template('staff-dash.html', registered = registered, displayname = get_displayname)
+    return render_template('staff-dash.html', registered = registered, displayname = get_displayname())
 
 # -- Route: Queue Dashboard
 
@@ -243,7 +243,7 @@ def queue_dash():
             return redirect(url_for('queue_dash'))
 
 
-    return render_template('wait-dash.html', queue_number = queue_number, registered = registered, displayname = get_displayname)
+    return render_template('wait-dash.html', queue_number = queue_number, registered = registered, displayname = get_displayname())
 
 # -- Route: User Dashboard
 
@@ -255,7 +255,7 @@ def user_dash():
         return redirect(url_for('login_user'))
     else: registered = True
 
-    return render_template('user-dash.html', registered = registered, displayname = get_displayname)
+    return render_template('user-dash.html', registered = registered, displayname = get_displayname())
 
 # -- Route: Book Appointment
 
@@ -285,7 +285,7 @@ def book_appointment():
 
             return redirect(url_for('user_dash'))
 
-    return render_template('book.html', registered = registered, displayname = get_displayname)
+    return render_template('book.html', registered = registered, displayname = get_displayname())
 
 # -- Route: Manage Bookings
 
@@ -300,7 +300,7 @@ def manage_bookings():
     with sqlite3.connect(DATABASE) as conn:
         bookings = conn.execute('SELECT * FROM bookings').fetchall()
     
-    return render_template('manage-bookings.html', bookings = bookings, registered = registered, displayname = get_displayname)
+    return render_template('manage-bookings.html', bookings = bookings, registered = registered, displayname = get_displayname())
 
 # -- Route: Manage Queue
 
@@ -326,7 +326,7 @@ def manage_queue():
         ''').fetchall()
 
     #print(tickets)
-    return render_template('manage-queue.html', tickets = tickets, registered = registered, displayname = get_displayname)
+    return render_template('manage-queue.html', tickets = tickets, registered = registered, displayname = get_displayname())
 
 # -- Route: Customise Website Aesthetic
 @app.route('/customise', methods=['GET', 'POST'])
@@ -345,7 +345,7 @@ def customise():
         return(redirect(url_for('staff_dash')))
 
 
-    return render_template('customise.html', registered = registered, displayname = get_displayname)
+    return render_template('customise.html', registered = registered, displayname = get_displayname())
 
 # -- Route: Delete Ticket
 @app.route('/delete_ticket/<int:ticket_id>', methods=['GET', 'POST'])
