@@ -10,7 +10,7 @@ app.secret_key = '6457fghd@@'
 
 #-- google gen AI config --
 client = genai.Client(api_key='AIzaSyBDDsqJRL_tQn_0Zp-Dqu_drkP9gcAjaFg')
-MODEL_ID="gemini-1.5-flash"
+MODEL_ID="gemini-1.5-flash-001"
 
 
 
