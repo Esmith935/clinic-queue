@@ -17,4 +17,286 @@
             <a href="/wait-dash" class="action-btn">Join queue</a>
         </div>
     </div>
+    
+    <!-- chatbot intergration -->
+
+    <div id="chat-container">
+        <div id="chat-header" onclick="togglechat()">
+            <span>Clinic Assistant</span>
+            <span id="toggle-icon">▼</span>
+        </div>
+        <div id="chat-body">
+            <div id="chat-messages">
+                <div id class="message bot-message">Hello! I am the clinic assistant. How can I help you today?</div>  
+            </div>
+            <div id="chat-input-area">
+                <input type="text" id="User" placeholder="Type your message..." onkeypress="handleEnter(event)">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+   <style>
+    /* Position the chat window in bottom right */
+    #chat-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 350px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        font-family: Arial, sans-serif;
+        z-index: 1000;
+        overflow: hidden;
+        border: 1px solid #ccc;
+    }
+
+    /* Header styling */
+    #chat-header {
+        background-color: #007bff; /* Change color to match your theme */
+        color: white;
+        padding: 10px 15px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+    }
+
+    /* Message area */
+    #chat-body {
+        display: none; /* Hidden by default until clicked */
+        flex-direction: column;
+    }
+
+    #chat-messages {
+        height: 300px;
+        overflow-y: auto;
+        padding: 15px;
+        background-color: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* Individual message bubbles */
+    .message {
+        padding: 8px 12px;
+        border-radius: 15px;
+        max-width: 80%;
+        line-height: 1.4;
+        font-size: 14px;
+    }
+
+    .user-message {
+        background-color: #007bff;
+        color: white;
+        align-self: flex-end; /* Push to right */
+        border-bottom-right-radius: 2px;
+    }
+
+    .bot-message {
+        background-color: #e0e0e0;
+        color: black;
+        align-self: flex-start; /* Push to left */
+        border-bottom-left-radius: 2px;
+    }
+
+    /* Input area */
+    #chat-input-area {
+        display: flex;
+        border-top: 1px solid #eee;
+    }
+
+    #user-input {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        outline: none;
+    }
+
+    #chat-input-area button {
+        background-color: transparent;
+        color: #007bff;
+        border: none;
+        padding: 0 15px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    #chat-input-area button:hover {
+        color: #0056b3;
+    }
+</style><style>
+    /* Position the chat window in bottom right */
+    #chat-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 350px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        font-family: Arial, sans-serif;
+        z-index: 1000;
+        overflow: hidden;
+        border: 1px solid #ccc;
+    }
+
+    /* Header styling */
+    #chat-header {
+        background-color: #007bff; /* Change color to match your theme */
+        color: white;
+        padding: 10px 15px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+    }
+
+    /* Message area */
+    #chat-body {
+        display: none; /* Hidden by default until clicked */
+        flex-direction: column;
+    }
+
+    #chat-messages {
+        height: 300px;
+        overflow-y: auto;
+        padding: 15px;
+        background-color: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* Individual message bubbles */
+    .message {
+        padding: 8px 12px;
+        border-radius: 15px;
+        max-width: 80%;
+        line-height: 1.4;
+        font-size: 14px;
+    }
+
+    .user-message {
+        background-color: #007bff;
+        color: white;
+        align-self: flex-end; /* Push to right */
+        border-bottom-right-radius: 2px;
+    }
+
+    .bot-message {
+        background-color: #e0e0e0;
+        color: black;
+        align-self: flex-start; /* Push to left */
+        border-bottom-left-radius: 2px;
+    }
+
+    /* Input area */
+    #chat-input-area {
+        display: flex;
+        border-top: 1px solid #eee;
+    }
+
+    #user-input {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        outline: none;
+    }
+
+    #chat-input-area button {
+        background-color: transparent;
+        color: #007bff;
+        border: none;
+        padding: 0 15px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    #chat-input-area button:hover {
+        color: #0056b3;
+    }
+</style>
+
+<script>
+    function togglechat() {
+        const body = document.getElementById('chat-body');
+        const icon = document.getElementById('toggle-icon');
+
+        if (body.style.display === 'flex') {
+            body.style.display = 'none';
+            icon.textContent = '▲'; // show up arrow when collapsed
+        } else {
+            body.style.display = 'flex';
+            icon.textContent = '▼'; // show down arrow when expanded
+        }
+    }
+
+    function handleEnter(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    }
+
+    function appendMessage(text, sender) {
+    const messagesDiv = document.getElementById('chart-messages');
+    const msgdiv = document.createElement('div');
+    msgdiv.classList.add('message');
+    msgdiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+    msgdiv.textContent = text;
+    messagesDiv.appendChild(msgdiv);
+
+    messagesDiv.scrollTop = messagesDiv.scrollHeight; // auto scroll to bottom
+    }
+
+    async function sendMessage() {
+        const userInput = document.getElementById('User-input');
+        const message = userInput.value.trim();
+        if (message === '') return;
+
+        // 1. Add user message to screen
+        appendMessage(message, 'user');
+        userInput.value = '';
+
+        // 2. Add temp loading message
+        const messagesDiv = document.getElementById('chat-messages');
+        const loadingMsg = document.createElement('div');
+        loadingMsg.classList.add('message', 'bot-message');
+        loadingMsg.textContent = '...';
+        loadingDiv.id = 'loading-msg';
+        messagesDiv.appendChild(loadingDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+        try {
+            //3. Send message to server
+            const response = await fetch('/chatbot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: message })
+            });
+
+            const data = await response.json();
+
+            //4. Remove loading message
+            document.getElementById('loading-msg').remove();
+
+            //5. Add bot response to screen
+            if (data.reply) {
+                appendMessage(data.reply, 'bot');
+            } else {
+                appendMessage("Error: " + data.error, 'bot');
+            }
+        } catch (error) {
+            // Remove loading message
+            document.getElementById('loading-msg').remove();
+            appendMessage('Sorry, something went wrong.', 'bot');
+            console.error('Error:', error);
+        }
+    }
+</script>
 {% endblock %}
+
