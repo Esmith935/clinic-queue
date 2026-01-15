@@ -30,7 +30,7 @@
                 <div id class="message bot-message">Hello! I am the clinic assistant. How can I help you today?</div>  
             </div>
             <div id="chat-input-area">
-                <input type="text" id="User" placeholder="Type your message..." onkeypress="handleEnter(event)">
+                <input type="text" id="User-input" placeholder="Type your message..." onkeypress="handleEnter(event)">
                 <button type="button" onclick="sendMessage()">Send</button>
             </div>
         </div>
@@ -219,7 +219,6 @@
         color: #0056b3;
     }
 </style>
-
 <script>
     function togglechat() {
         const body = document.getElementById('chat-body');
@@ -227,10 +226,10 @@
 
         if (body.style.display === 'flex') {
             body.style.display = 'none';
-            icon.textContent = '▲'; // show up arrow when collapsed
+            icon.textContent = '▲'; 
         } else {
             body.style.display = 'flex';
-            icon.textContent = '▼'; // show down arrow when expanded
+            icon.textContent = '▼'; 
         }
     }
 
@@ -241,19 +240,20 @@
     }
 
     function appendMessage(text, sender) {
-    const messagesDiv = document.getElementById('chart-messages');
-    const msgdiv = document.createElement('div');
-    msgdiv.classList.add('message');
-    msgdiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
-    msgdiv.textContent = text;
-    messagesDiv.appendChild(msgdiv);
+        // FIX 1: Corrected ID from 'chart-messages' to 'chat-messages'
+        const messagesDiv = document.getElementById('chat-messages');
+        const msgdiv = document.createElement('div');
+        msgdiv.classList.add('message');
+        msgdiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+        msgdiv.textContent = text;
+        messagesDiv.appendChild(msgdiv);
 
-    messagesDiv.scrollTop = messagesDiv.scrollHeight; // auto scroll to bottom
+        messagesDiv.scrollTop = messagesDiv.scrollHeight; 
     }
 
     async function sendMessage() {
-        alert("button was clicked!");
-        const userInput = document.getElementById('User-input');
+        // FIX 2: Corrected ID to match the HTML input
+        const userInput = document.getElementById('user-input');
         const message = userInput.value.trim();
         if (message === '') return;
 
@@ -263,15 +263,17 @@
 
         // 2. Add temp loading message
         const messagesDiv = document.getElementById('chat-messages');
+        
+        // FIX 3: Consistent variable naming (loadingMsg)
         const loadingMsg = document.createElement('div');
         loadingMsg.classList.add('message', 'bot-message');
         loadingMsg.textContent = '...';
-        loadingDiv.id = 'loading-msg';
-        messagesDiv.appendChild(loadingDiv);
+        loadingMsg.id = 'loading-msg'; // Fixed variable name here
+        messagesDiv.appendChild(loadingMsg); // Fixed variable name here
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
         try {
-            //3. Send message to server
+            // 3. Send message to server
             const response = await fetch('/chatbot', {
                 method: 'POST',
                 headers: {
@@ -282,22 +284,27 @@
 
             const data = await response.json();
 
-            //4. Remove loading message
-            document.getElementById('loading-msg').remove();
+            // 4. Remove loading message
+            if(document.getElementById('loading-msg')) {
+                document.getElementById('loading-msg').remove();
+            }
 
-            //5. Add bot response to screen
+            // 5. Add bot response to screen
             if (data.reply) {
                 appendMessage(data.reply, 'bot');
             } else {
-                appendMessage("Error: " + data.error, 'bot');
+                appendMessage("Error: " + (data.error || "Unknown error"), 'bot');
             }
         } catch (error) {
-            // Remove loading message
-            document.getElementById('loading-msg').remove();
+            // Remove loading message if exists
+            if(document.getElementById('loading-msg')) {
+                document.getElementById('loading-msg').remove();
+            }
             appendMessage('Sorry, something went wrong.', 'bot');
             console.error('Error:', error);
         }
     }
 </script>
+
 {% endblock %}
 
