@@ -12,7 +12,7 @@ DATABASE = 'database.db'
 # -- Get Website Display Name :
 
 def get_displayname():
-    displayname = open("clinic-queue/displayname.txt", "r").read()
+    displayname = open("displayname.txt", "r").read()
     return displayname
 
 # -- Initialise Database
