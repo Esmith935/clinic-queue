@@ -16,7 +16,7 @@ app = Flask(__name__)
 app.secret_key = '6457fghd@@'
 
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'jpg'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -371,7 +371,7 @@ def customise():
             f.write(displayname)
         
         if background and allowed_file(background.filename):
-            filename = secure_filename(background.filename)
+            filename = secure_filename("background.jpg")
             background.save(os.path.join(UPLOAD_FOLDER, filename))
 
 

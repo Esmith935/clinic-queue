@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Diary</h1>
+<h2>Accepted Bookings</h2>
+    <table>
+        <thead>
+            <th onclick="sortTable(0)">ID</th>
+            <th onclick="sortTable(1)">Customer</th>
+            <th onclick="sortTable(2)">Date / Time</th>
+            <th>Delete</th>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+                <tr>
+                    <td>{{booking[0]}}</td>
+                    <td>{{booking[1]}}</td>
+                    <td>{{booking[2]}}</td>
+                    <td><a href="{{ url_for('delete_booking', booking_id=booking[0])}}">Delete</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+<h2>Accepted Appointments</h2>
+    <table>
+        <thead>
+            <th onclick="sortTable(0)">Ticket ID</th>
+            <th onclick="sortTable(1)">Name</th>
+            <th>Delete</th>
+        </thead>
+        <tbody>
+            {% for ticket in tickets %}
+                <tr>
+                    <td>{{ticket[0]}}</td>
+                    <td>{{ticket[1]}}</td>
+                    <td><a href="{{ url_for('delete_ticket', ticket_id=ticket[0])}}">Delete</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
